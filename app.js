@@ -18,6 +18,10 @@ function setAuth() {
 
   function readthevalues(){
  doc.getInfo(function(err, info) {
+     if (err) {
+      console.log('The API returned an error: ' + err);
+      return;
+    }
       console.log('Loaded doc: '+info.title+' by '+info.author.email);
       sheet = info.worksheets[0];
       console.log('sheet 1: '+sheet.title+' '+sheet.rowCount+'x'+sheet.colCount);
