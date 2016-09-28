@@ -24,7 +24,7 @@ server.post('/api/messages', connector.listen());
 //=========================================================
 
 bot.dialog('/', function (session) {
-    //session.send("Hello World");
+    session.send("Hello World");
     for (var i = 0; i < dishes.length; i++) {
         session.send(dishes[i]);
     }
@@ -52,7 +52,13 @@ fs.readFile('client_secret.json', function processClientSecrets(err, content) {
   }
   // Authorize a client with the loaded credentials, then call the
   // Google Sheets API.
-  authorize(JSON.parse(content), listMajors);
+  //authorize(JSON.parse(content), listMajors);
+  var clientSecret = credentials.installed.client_secret;
+  var clientId = credentials.installed.client_id;
+  var redirectUrl = credentials.installed.redirect_uris[0];
+  var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+  oauth2Client.credentials = process.env.GOOGLE_KEY;
+  listMajors(oauth2Client);
 });
 
 /**
@@ -157,3 +163,4 @@ function listMajors(auth) {
     }
   });
 }
+//4/7CkdyxOn72iS_mV6L8rtq1l0S0iH602YViUvE5NTSDw
