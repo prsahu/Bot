@@ -90,7 +90,7 @@ function authorize(credentials, callback) {
  */
 function getNewToken(oauth2Client, callback) {
   var authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
+    access_type: 'online',
     scope: SCOPES
   });
   console.log('Authorize this app by visiting this url: ', authUrl);
