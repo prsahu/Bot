@@ -53,12 +53,19 @@ fs.readFile('client_secret.json', function processClientSecrets(err, content) {
   // Authorize a client with the loaded credentials, then call the
   // Google Sheets API.
   //authorize(JSON.parse(content), listMajors);
+  
   var clientSecret = JSON.parse(content).installed.client_secret;
   var clientId = JSON.parse(content).installed.client_id;
   var redirectUrl = JSON.parse(content).installed.redirect_uris[0];
   var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
   oauth2Client.credentials = process.env.GOOGLE_KEY;
+  
+  console.log(clientSecret);
+  console.log(clientId);
+  console.log(redirectUrl);
+  console.log(process.env.GOOGLE_KEY);
+  
   listMajors(oauth2Client);
 });
 
@@ -69,7 +76,7 @@ fs.readFile('client_secret.json', function processClientSecrets(err, content) {
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback) {
+/*function authorize(credentials, callback) {
   var clientSecret = credentials.installed.client_secret;
   var clientId = credentials.installed.client_id;
   var redirectUrl = credentials.installed.redirect_uris[0];
@@ -95,7 +102,7 @@ function authorize(credentials, callback) {
  * @param {getEventsCallback} callback The callback to call with the authorized
  *     client.
  */
-function getNewToken(oauth2Client, callback) {
+/*function getNewToken(oauth2Client, callback) {
   var authUrl = oauth2Client.generateAuthUrl({
     access_type: 'online',
     scope: SCOPES
@@ -124,7 +131,7 @@ function getNewToken(oauth2Client, callback) {
  *
  * @param {Object} token The token to store to disk.
  */
-function storeToken(token) {
+/*function storeToken(token) {
   try {
     fs.mkdirSync(TOKEN_DIR);
   } catch (err) {
