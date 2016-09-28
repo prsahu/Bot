@@ -49,7 +49,8 @@ function listMajors(){//auth) {
   sheets.spreadsheets.values.get({
     //auth: auth,    
     spreadsheetId: '1yvwKdDinme0_Rjs0SvyPmIlO6CJpI5JvlBpeWhyi_uE',
-    range: 'Dishes!A1',
+    range: 'Dishes!A1:A5',
+    field: sheets,
     key : process.env.private_key
 
   }, function(err, response) {
@@ -66,7 +67,7 @@ function listMajors(){//auth) {
       for (var i = 0; i < rows.length; i++) {
         var row = rows[i];
         // Print columns A and E, which correspond to indices 0 and 4.
-        console.log('%s, %s', row[0], row[4]);
+        console.log('%s', row[0]);
       }
     }
   });
