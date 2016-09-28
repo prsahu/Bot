@@ -56,6 +56,7 @@ fs.readFile('client_secret.json', function processClientSecrets(err, content) {
   var clientSecret = JSON.parse(content).installed.client_secret;
   var clientId = JSON.parse(content).installed.client_id;
   var redirectUrl = JSON.parse(content).installed.redirect_uris[0];
+  var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
   oauth2Client.credentials = process.env.GOOGLE_KEY;
   listMajors(oauth2Client);
