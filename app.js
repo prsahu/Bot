@@ -53,9 +53,9 @@ fs.readFile('client_secret.json', function processClientSecrets(err, content) {
   // Authorize a client with the loaded credentials, then call the
   // Google Sheets API.
   //authorize(JSON.parse(content), listMajors);
-  var clientSecret = credentials.installed.client_secret;
-  var clientId = credentials.installed.client_id;
-  var redirectUrl = credentials.installed.redirect_uris[0];
+  var clientSecret = JSON.parse(content).installed.client_secret;
+  var clientId = JSON.parse(content).installed.client_id;
+  var redirectUrl = JSON.parse(content).installed.redirect_uris[0];
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
   oauth2Client.credentials = process.env.GOOGLE_KEY;
   listMajors(oauth2Client);
