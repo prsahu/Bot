@@ -6,7 +6,7 @@ var sheet;
 
 function setAuth() {
     // see notes below for authentication instructions! 
-    var creds = require('client_secret.json');
+   // var creds = require('client_secret.json');
     // OR, if you cannot save the file locally (like on heroku) 
     var creds_json = {
       client_email: 'prafful.sahu1@gmail.com',
