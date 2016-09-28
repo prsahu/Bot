@@ -1,11 +1,11 @@
 
+var dishes;
 function listMajors(){//auth) {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.get({
     //auth: auth,
     spreadsheetId: '1yvwKdDinme0_Rjs0SvyPmIlO6CJpI5JvlBpeWhyi_uE',
     range: 'Dishes!A1:A5',
-    field: sheets,
     key : process.env.private_key
 
   }, function(err, response) {
