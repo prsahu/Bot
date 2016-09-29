@@ -1,10 +1,12 @@
 
 var dishes;
+var description;
+var imageUrls;
 function listMajors(){//auth) {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.get({
     //auth: auth,
-    spreadsheetId: '1yvwKdDinme0_Rjs0SvyPmIlO6CJpI5JvlBpeWhyi_uE',
+    spreadsheetId: process.env.spreadsheetId,
     range: 'Dishes!A1:A5',
     key : process.env.private_key
 
@@ -18,6 +20,40 @@ function listMajors(){//auth) {
     dishes = response.values;
 
   });
+
+  sheets.spreadsheets.values.get({
+    //auth: auth,
+    spreadsheetId: process.env.spreadsheetId,
+    range: 'Dishes!B1:B5',
+    key : process.env.private_key
+
+  }, function(err, response) {
+    if (err) {
+      console.log('The API returned an error: ' + err);
+      return;
+    }
+    //console.log(response);
+
+    description = response.values;
+
+  });
+
+  /*sheets.spreadsheets.values.get({
+    //auth: auth,
+    spreadsheetId: process.env.spreadsheetId,
+    range: 'Dishes!C1:C5',
+    key : process.env.private_key
+
+  }, function(err, response) {
+    if (err) {
+      console.log('The API returned an error: ' + err);
+      return;
+    }
+    //console.log(response);
+
+    imageUrls = response.values;
+
+  });*/
 }
 
 var restify = require('restify');
@@ -48,7 +84,7 @@ function CreateMenuCardsForView(session){
   for (var i = 0; i < dishes.length; i++) {
     var tempCard2 = new builder.HeroCard(session)
         .title(dishes[i])
-        .subtitle(dishes[i])
+        .subtitle(description[i])
         .images([
             builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
         ]);
