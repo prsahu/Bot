@@ -109,7 +109,7 @@ var connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID,
     appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
-var bot = new builder.UniversalBot(connector);
+var bot = new builder.UniversalBot(connector, { persistConversationData: true });
 server.post('/api/messages', connector.listen());
 
 var google = require('googleapis');
@@ -131,7 +131,8 @@ bot.dialog('/Welcome', [
     session.send("What can we do for you today?");
     session.sendTyping();
     builder.Prompts.choice(session,"Choose One","Place an order|View Menu|Leave Review|My Details|(quit)");
-    session.conversationData.currentOrder = {};
+    //console.log(typeof session.conversationData);
+   session.conversationData = {};
   },
   function(session,results){
     if (results.response && results.response.entity != '(quit)') {
@@ -163,17 +164,18 @@ bot.dialog('/Place an order',[
         item = results.response.entity;
         session.send('You selected %s ', item);        
         tempDish = item;
-        builder.Prompts.number(session, "Please enter quantity you would like to order eg:1,2,10,etc.");
-        
+        builder.Prompts.number(session, "Please enter quantity you would like to order eg:1,2,10,etc.");        
     },
     function (session,results){
-      session.send("You chose '%s'", results.response.entity);
+      session.send("You chose '%s'", results.response);      
+      
       if(session.conversationData[tempDish]!=null){
-        session.conversationData[tempDish]= session.conversationData[tempDish]+ results.response.entity;
+        session.conversationData[tempDish]= session.conversationData[tempDish]+ results.response;
       }else{
-        session.conversationData[tempDish]=results.response.entity;
+        session.conversationData[tempDish]=results.response;
+        //console.log(session.conversationData);
       }
-      //session.conversationData.currentOrder.push(tempDish+":"+results.response.entity);
+      
       builder.Prompts.choice(session,"Would you like to add something more?","Yes|No");
     },
     function (session,results){
@@ -211,20 +213,18 @@ bot.dialog('/Order Confirmation',[
   function(session){
     if(session.userData.contactDetails!=null&&session.userData.contactDetails==true){
       var temp="Here is your order:";
-      /*for (var i = 0; i < session.conversationData.currentOrder.length; i++) {
-        temp += "\n "+session.conversationData.currentOrder[i];
-      }*/
-      for(var key in session.conversationData.currentOrder){
-        console.log("Key "+key.toString());
-        if(session.conversationData.currentOrder(key)){
-          console.log(session.conversationData.currentOrder[key].toString());
-          //temp += "\n"+ session.conversationData.currentOrder[key];
+      
+      for(var key in session.conversationData){
+        console.log("Key");
+        console.log("Key "+key);
+        if(session.conversationData[key]){
+          console.log(session.conversationData[key].toString());
+          temp += "\n"+ session.conversationData[key];
         }
       }
-      temp = JSON.stringify(session.conversationData.currentOrder);
-      console.log(temp);
+      
       session.send("Thanks you for your order again %s",session.userData.name);
-      console.log("End");
+      //console.log("End");
       session.endConversation("");
     }else{
       session.replaceDialog('/User Information');
