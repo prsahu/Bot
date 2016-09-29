@@ -2,6 +2,7 @@
 var dishes;
 var description;
 var imageUrls;
+var tempDish="";
 function listMajors(){//auth) {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.get({
@@ -130,6 +131,7 @@ bot.dialog('/Welcome', [
     session.send("What can we do for you today?");
     session.sendTyping();
     builder.Prompts.choice(session,"Choose One","Place an order|View Menu|Leave Review|My Details|(quit)");
+    session.conversationData.currentOrder = {};
   },
   function(session,results){
     if (results.response && results.response.entity != '(quit)') {
@@ -160,15 +162,23 @@ bot.dialog('/Place an order',[
     var action, item;
         item = results.response.entity;
         session.send('You selected %s ', item);        
+        tempDish = item;
         builder.Prompts.number(session, "Please enter quantity you would like to order eg:1,2,10,etc.");
+        
     },
     function (session,results){
       session.send("You chose '%s'", results.response.entity);
+      if(session.conversationData[tempDish]!=null){
+        session.conversationData[tempDish]= session.conversationData[tempDish]+ results.response.entity;
+      }else{
+        session.conversationData[tempDish]=results.response.entity;
+      }
+      //session.conversationData.currentOrder.push(tempDish+":"+results.response.entity);
       builder.Prompts.choice(session,"Would you like to add something more?","Yes|No");
     },
     function (session,results){
       if(results.response.entity=="Yes"){
-
+        session.beginDialog('/Place an order');
       }else{
         session.replaceDialog('/Order Confirmation');
       }
@@ -199,7 +209,26 @@ bot.dialog('/Leave Review',[
 
 bot.dialog('/Order Confirmation',[
   function(session){
-    session.replaceDialog('/User Information');
+    if(session.userData.contactDetails!=null&&session.userData.contactDetails==true){
+      var temp="Here is your order:";
+      /*for (var i = 0; i < session.conversationData.currentOrder.length; i++) {
+        temp += "\n "+session.conversationData.currentOrder[i];
+      }*/
+      for(var key in session.conversationData.currentOrder){
+        console.log("Key "+key.toString());
+        if(session.conversationData.currentOrder(key)){
+          console.log(session.conversationData.currentOrder[key].toString());
+          //temp += "\n"+ session.conversationData.currentOrder[key];
+        }
+      }
+      temp = JSON.stringify(session.conversationData.currentOrder);
+      console.log(temp);
+      session.send("Thanks you for your order again %s",session.userData.name);
+      console.log("End");
+      session.endConversation("");
+    }else{
+      session.replaceDialog('/User Information');
+    }    
   }
 ]);
 
@@ -224,6 +253,8 @@ bot.dialog('/User Information',[
   },
   function (session,results){
     session.userData.phoneNumber = results.response;
+    session.userData.contactDetails = true;
+    session.endConversation("");
   }
 ]);
 
