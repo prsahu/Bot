@@ -126,8 +126,11 @@ function(session){
 
 bot.dialog('/Welcome', [
   function (session) {
+    session.sendTyping();
     session.send("Namaste! Welcome to Indian Kitchen");
+    session.sendTyping();
     session.send("What can we do for you today?");
+    session.sendTyping();
     builder.Prompts.choice(session,"Choose One","Place an order|View Menu|Leave Review|(quit)");
   },
   function(session,results){
@@ -147,6 +150,7 @@ bot.dialog('/Welcome', [
 
 bot.dialog('/Place an order',[
   function(session){
+    session.sendTyping();
     session.send("Here is the menu: ");
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
@@ -174,6 +178,7 @@ bot.dialog('/View Menu',[
 
 bot.dialog('/Leave Review',[
   function(session){
+    session.sendTyping();
     builder.Prompts.text(session, "Please type in your review and send.");
   },
   function(session,results){
