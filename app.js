@@ -36,7 +36,7 @@ function CreateMenuCardsForOrder(session){
                 //.tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
         ])
         .buttons([
-            builder.CardAction.imBack( dishes[i], "Select")
+            builder.CardAction.imBack(session, dishes[i], "Select")
         ]);
     cardsForOrder.push(tempCard);
   }
@@ -131,7 +131,7 @@ bot.dialog('/View Menu',[
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
         .attachments(CreateMenuCardsForView(session));
-    builder.Prompts.choice(session, msg, "select:100|select:101|select:102");
+    builder.Prompts.choice(session, msg);// "select:100|select:101|select:102");
     session.endDialog();
   }
 ]);
