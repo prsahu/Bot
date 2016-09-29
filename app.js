@@ -51,6 +51,8 @@ function CreateMenuCardsForView(session){
         .subtitle(dishes[i])
         .images([
             builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
+        ]).buttons([
+            builder.CardAction.imBack(session, dishes[i], "Select")
         ]);
     cardsForViewing.push(tempCard2);
   }
