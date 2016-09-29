@@ -27,7 +27,7 @@ var cardsForOrder=[];
 var cardsForViewing=[];
 function CreateMenuCards(){
   for (var i = 0; i < dishes.length; i++) {
-    var tempCard = new builder.HeroCard(session)
+    var tempCard = new builder.HeroCard()
         .title(dishes[i])
         .subtitle(dishes[i])
         .images([
@@ -39,7 +39,7 @@ function CreateMenuCards(){
         ]);
     cardsForOrder.push(tempCard);
 
-    var tempCard2 = new builder.HeroCard(session)
+    var tempCard2 = new builder.HeroCard()
         .title(dishes[i])
         .subtitle(dishes[i])
         .images([
