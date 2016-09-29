@@ -36,7 +36,7 @@ function CreateMenuCardsForOrder(session){
                 .tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
         ])
         .buttons([
-            builder.CardAction.imBack(session,dishes[i], "Select")
+            builder.CardAction.imBack(session,"asd", "Select")
         ]);
     cardsForOrder.push(tempCard);
   }
