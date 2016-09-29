@@ -67,7 +67,7 @@ bot.dialog('/Welcome', [
   function (session) {
     session.send("Namaste! Welcome to Indian Kitchen");
     session.send("What can we do for you today?");
-    session.Prompts.choice(session,"Choose One","Place an order|View Menu|Leave Review|(quit)");
+    builder.Prompts.choice(session,"Choose One","Place an order|View Menu|Leave Review|(quit)");
   },
   function(session,results){
     if (results.response && results.response.entity != '(quit)') {
