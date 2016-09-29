@@ -33,10 +33,10 @@ function CreateMenuCardsForOrder(session){
         .subtitle(dishes[i])
         .images([
             builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
-                //.tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
+                .tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
         ])
         .buttons([
-            builder.CardAction.imBack( dishes[i], "Select")
+            builder.CardAction.imBack(session,dishes[i], "Select")
         ]);
     cardsForOrder.push(tempCard);
   }
@@ -115,6 +115,7 @@ bot.dialog('/Place an order',[
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
         .attachments(CreateMenuCardsForOrder(session));
+        console.console.log(dishes.join("|"));
     builder.Prompts.choice(session, msg, dishes.join("|"));
   },
   function (session,results) {
