@@ -13,7 +13,7 @@ function listMajors(){//auth) {
       console.log('The API returned an error: ' + err);
       return;
     }
-    console.log(response);
+    //console.log(response);
 
     dishes = response.values;
 
@@ -115,7 +115,7 @@ bot.dialog('/Place an order',[
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
         .attachments(CreateMenuCardsForOrder(session));
-    builder.Prompts.choice(session, msg, "select:100|select:101|select:102");
+    builder.Prompts.choice(session, msg, dishes.join("|"));
   },
   function (session,results) {
     var action, item;
