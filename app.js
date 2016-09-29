@@ -57,6 +57,12 @@ var google = require('googleapis');
 // Bots Dialogs
 //=========================================================
 bot.endConversationAction('goodbye', 'Goodbye :)', { matches: /^goodbye/i });
+
+bot.dialog('/',
+function(session){
+  session.replaceDialog('/Welcome');
+});
+
 bot.dialog('/Welcome', [
   function (session) {
     session.send("Namaste! Welcome to Indian Kitchen");
