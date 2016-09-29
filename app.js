@@ -14,23 +14,42 @@ function listMajors(){//auth) {
       return;
     }
     console.log(response);
-    var rows = response.values;
+
     dishes = response.values;
-    if (rows.length == 0) {
-      console.log('No data found.');
-    } else {
-      console.log('Name, Major:');
-      for (var i = 0; i < rows.length; i++) {
-        var row = rows[i];
-        // Print columns A and E, which correspond to indices 0 and 4.
-        console.log('%s', row[0]);
-      }
-    }
+    CreateMenuCards();
   });
 }
 
 var restify = require('restify');
 var builder = require('botbuilder');
+
+var cardsForOrder=[];
+var cardsForViewing=[];
+function CreateMenuCards(){
+  for (var i = 0; i < dishes.length; i++) {
+    var tempCard = new builder.HeroCard(session)
+        .title(dishes[i])
+        .subtitle(dishes[i])
+        .images([
+            builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
+                .tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
+        ])
+        .buttons([
+            builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle", "Wikipedia"),
+            builder.CardAction.imBack(session, "select:100", "Select")
+        ]);
+    cardsForOrder.push(tempCard);
+
+    var tempCard2 = new builder.HeroCard(session)
+        .title(dishes[i])
+        .subtitle(dishes[i])
+        .images([
+            builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
+                .tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
+        ]);
+    cardsForViewing.push(tempCard);
+  }
+}
 
 //=========================================================
 // Bot Setup
@@ -93,24 +112,10 @@ bot.dialog('/Place an order',[
 bot.dialog('/View Menu',[
   function(session){
     session.send("Here is the menu: ");
-    var attachments=[];
-    for (var i = 0; i < dishes.length; i++) {
-      var tempCard = new builder.HeroCard(session)
-          .title(dishes[i])
-          .subtitle(dishes[i])
-          .images([
-              builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
-                  .tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
-          ])
-          .buttons([
-              builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle", "Wikipedia"),
-              builder.CardAction.imBack(session, "select:100", "Select")
-          ]);
-      attachments.push(tempCard);
-    }
+
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
-        .attachments(attachments);
+        .attachments(cardsForViewing);
     builder.Prompts.choice(session, msg, "select:100|select:101|select:102");
   }
 ]);
