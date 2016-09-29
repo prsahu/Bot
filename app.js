@@ -115,8 +115,8 @@ bot.dialog('/Place an order',[
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
         .attachments(CreateMenuCardsForOrder(session));
-        console.console.log(dishes.join("|"));
-    builder.Prompts.choice(session, msg, dishes.join("|"));
+      //  console.console.log(dishes.join("|"));
+    builder.Prompts.choice(session, msg, "select");//dishes.join("|"));
   },
   function (session,results) {
     var action, item;
