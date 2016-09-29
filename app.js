@@ -140,6 +140,7 @@ bot.dialog('/Leave Review',[
     builder.Prompts.text(session, "Please type in your review and send.");
   },
   function(session,results){
-    session.send("Here is your review"+results.response);
+    session.send("Here is your review "+results.response);
+    session.replaceDialog('/Welcome');
   }
 ]);
