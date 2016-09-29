@@ -93,7 +93,7 @@ bot.dialog('/Place an order',[
 bot.dialog('/View Menu',[
   function(session){
     session.send("Here is the menu: ");
-    var attachments={};
+    var attachments=[];
     for (var i = 0; i < dishes.length; i++) {
       var tempCard = new builder.HeroCard(session)
           .title(dishes[i])
