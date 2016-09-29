@@ -28,7 +28,7 @@ var builder = require('botbuilder');
 function CreateMenuCardsForOrder(session){
   var cardsForOrder=[];
   for (var i = 0; i < dishes.length; i++) {
-    var tempCard = new builder.HeroCard()
+    var tempCard = new builder.HeroCard(session)
         .title(dishes[i])
         .subtitle(dishes[i])
         .images([
@@ -46,7 +46,7 @@ function CreateMenuCardsForOrder(session){
 function CreateMenuCardsForView(session){
   var cardsForViewing=[];
   for (var i = 0; i < dishes.length; i++) {
-    var tempCard2 = new builder.HeroCard()
+    var tempCard2 = new builder.HeroCard(session)
         .title(dishes[i])
         .subtitle(dishes[i])
         .images([
@@ -119,7 +119,6 @@ bot.dialog('/Place an order',[
   },
   function (session,results) {
     var action, item;
-
         item = results.response.entity;
         session.endDialog('You %s ', item);
     }
