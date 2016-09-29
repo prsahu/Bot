@@ -16,37 +16,45 @@ function listMajors(){//auth) {
     console.log(response);
 
     dishes = response.values;
-    CreateMenuCards();
+
   });
 }
 
 var restify = require('restify');
 var builder = require('botbuilder');
 
-var cardsForOrder=[];
-var cardsForViewing=[];
-function CreateMenuCards(){
+
+
+function CreateMenuCardsForOrder(session){
+  var cardsForOrder=[];
   for (var i = 0; i < dishes.length; i++) {
     var tempCard = new builder.HeroCard()
         .title(dishes[i])
         .subtitle(dishes[i])
         .images([
-            builder.CardImage.url("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")//create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
+            builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
                 //.tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
         ])
         .buttons([
             builder.CardAction.imBack( dishes[i], "Select")
         ]);
     cardsForOrder.push(tempCard);
+  }
+  return cardsForOrder;
+}
 
+function CreateMenuCardsForView(session){
+  var cardsForViewing=[];
+  for (var i = 0; i < dishes.length; i++) {
     var tempCard2 = new builder.HeroCard()
         .title(dishes[i])
         .subtitle(dishes[i])
         .images([
-            builder.CardImage.url("https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")//create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
+            builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
         ]);
-    cardsForViewing.push(tempCard);
+    cardsForViewing.push(tempCard2);
   }
+  return cardsForViewing;
 }
 
 //=========================================================
@@ -106,7 +114,7 @@ bot.dialog('/Place an order',[
     session.send("Here is the menu: ");
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
-        .attachments(cardsForOrder);
+        .attachments(CreateMenuCardsForOrder(session));
     builder.Prompts.choice(session, msg, "select:100|select:101|select:102");
   },
   function (session,results) {
@@ -122,7 +130,7 @@ bot.dialog('/View Menu',[
     session.send("Here is the menu: ");
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
-        .attachments(cardsForViewing);
+        .attachments(CreateMenuCardsForView(session));
     builder.Prompts.choice(session, msg, "select:100|select:101|select:102");
     session.endDialog();
   }
