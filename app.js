@@ -129,7 +129,7 @@ bot.dialog('/Welcome', [
     session.sendTyping();
     session.send("What can we do for you today?");
     session.sendTyping();
-    builder.Prompts.choice(session,"Choose One","Place an order|View Menu|Leave Review|(quit)");
+    builder.Prompts.choice(session,"Choose One","Place an order|View Menu|Leave Review|My Details|(quit)");
   },
   function(session,results){
     if (results.response && results.response.entity != '(quit)') {
@@ -159,8 +159,7 @@ bot.dialog('/Place an order',[
   function (session,results) {
     var action, item;
         item = results.response.entity;
-        session.send('You selected %s ', item);
-        session.sendTyping();
+        session.send('You selected %s ', item);        
         builder.Prompts.number(session, "Please enter quantity you would like to order eg:1,2,10,etc.");
     },
     function (session,results){
@@ -212,8 +211,7 @@ bot.dialog('/User Information',[
     if(results.response){
       session.send("I am afraid I have a bad memory");
       session.sendTyping();
-      session.send("So you will have to share the details again");
-      session.sendTyping();
+      session.send("So you will have to share the details again");      
       builder.Prompts.text(session,"What is your name?");
     }else{
       builder.Prompts.text(session,"What is your name?");
@@ -221,10 +219,18 @@ bot.dialog('/User Information',[
   },
   function(session,results){
     session.userData.name= results.response;
-    session.sendTyping();
-    builder.Prompts.number(session,"Hi %s. Can I have your phone number also??",results.response);
+    var temp = "Hi "+results.response+"! Can I have your phone number also??";
+    builder.Prompts.number(session,temp);//,results.response);
   },
   function (session,results){
     session.userData.phoneNumber = results.response;
+  }
+]);
+
+bot.dialog('/My Details',[
+  function(session){
+    session.send("Your name is %s",session.userData.name);
+    session.send("Your phoneNumber is "+session.userData.phoneNumber.toString());
+    session.endConversation("");
   }
 ]);
