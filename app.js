@@ -116,7 +116,6 @@ bot.dialog('/Place an order',[
         item = results.response.entity;
         session.endDialog('You %s ', item);
     }
-  }
 ]);
 
 bot.dialog('/View Menu',[
