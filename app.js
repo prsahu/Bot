@@ -35,8 +35,7 @@ function CreateMenuCards(){
                 .tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
         ])
         .buttons([
-            builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle", "Wikipedia"),
-            builder.CardAction.imBack(session, "select:100", "Select")
+            builder.CardAction.imBack(session, dishes[i], "Select")
         ]);
     cardsForOrder.push(tempCard);
 
@@ -105,18 +104,29 @@ bot.dialog('/Welcome', [
 
 bot.dialog('/Place an order',[
   function(session){
+    session.send("Here is the menu: ");
+    var msg = new builder.Message(session)
+        .attachmentLayout(builder.AttachmentLayout.carousel)
+        .attachments(cardsForOrder);
+    builder.Prompts.choice(session, msg, "select:100|select:101|select:102");
+  },
+  function (session,results) {
+    var action, item;
 
+        item = results.response.entity;
+        session.endDialog('You %s ', item);
+    }
   }
 ]);
 
 bot.dialog('/View Menu',[
   function(session){
     session.send("Here is the menu: ");
-
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
         .attachments(cardsForViewing);
     builder.Prompts.choice(session, msg, "select:100|select:101|select:102");
+    session.endDialog();
   }
 ]);
 
