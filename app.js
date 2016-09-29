@@ -214,9 +214,9 @@ bot.dialog('/User Information',[
       session.sendTyping();
       session.send("So you will have to share the details again");
       session.sendTyping();
-      builder.pro.text(session,"What is your name?");
+      builder.Prompts.text(session,"What is your name?");
     }else{
-      builder.pro.text(session,"What is your name?");
+      builder.Prompts.text(session,"What is your name?");
     }
   },
   function(session,results){
