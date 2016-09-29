@@ -36,7 +36,7 @@ function CreateMenuCardsForOrder(session){
                 .tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
         ])
         .buttons([
-            builder.CardAction.imBack(session,"asd", "Select")
+            builder.CardAction.imBack(session,dishes[i].toString(), "Select")
         ]);
     cardsForOrder.push(tempCard);
   }
@@ -116,7 +116,7 @@ bot.dialog('/Place an order',[
         .attachmentLayout(builder.AttachmentLayout.carousel)
         .attachments(CreateMenuCardsForOrder(session));
       //  console.console.log(dishes.join("|"));
-    builder.Prompts.choice(session, msg, "select");//dishes.join("|"));
+    builder.Prompts.choice(session, msg, dishes.join("|"));
   },
   function (session,results) {
     var action, item;
