@@ -59,14 +59,12 @@ function listMajors(){//auth) {
 var restify = require('restify');
 var builder = require('botbuilder');
 
-
-
 function CreateMenuCardsForOrder(session){
   var cardsForOrder=[];
   for (var i = 0; i < dishes.length; i++) {
     var tempCard = new builder.HeroCard(session)
         .title(dishes[i])
-        .subtitle(dishes[i])
+        .subtitle(description[i])
         .images([
             builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
                 .tap(builder.CardAction.showImage(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/800px-Seattlenighttimequeenanne.jpg")),
@@ -142,10 +140,10 @@ bot.dialog('/Welcome', [
             session.endDialog();
     }
   },
-    function (session, results) {
-        // The menu runs a loop until the user chooses to (quit).
-        session.replaceDialog('/Welcome');
-    }
+  function (session, results) {
+    // The menu runs a loop until the user chooses to (quit).
+    session.replaceDialog('/Welcome');
+  }
 ]);
 
 bot.dialog('/Place an order',[
@@ -161,7 +159,20 @@ bot.dialog('/Place an order',[
   function (session,results) {
     var action, item;
         item = results.response.entity;
-        session.endDialog('You %s ', item);
+        session.send('You selected %s ', item);
+        session.sendTyping();
+        builder.Prompts.number(session, "Please enter quantity you would like to order eg:1,2,10,etc.");
+    },
+    function (session,results){
+      session.send("You chose '%s'", results.response.entity);
+      builder.Prompts.choice(session,"Would you like to add something more?","Yes|No");
+    },
+    function (session,results){
+      if(results.response.entity=="Yes"){
+
+      }else{
+        session.replaceDialog('/Order Confirmation');
+      }
     }
 ]);
 
@@ -184,5 +195,36 @@ bot.dialog('/Leave Review',[
   function(session,results){
     session.send("Here is your review "+results.response);
     session.replaceDialog('/Welcome');
+  }
+]);
+
+bot.dialog('/Order Confirmation',[
+  function(session){
+    session.replaceDialog('/User Information');
+  }
+]);
+
+bot.dialog('/User Information',[
+  function(session){
+    builder.Prompts.confirm(session, "Are you a returning foodie?. Answer yes or no now.");
+  },
+  function (session, results) {
+    if(results.response){
+      session.send("I am afraid I have a bad memory");
+      session.sendTyping();
+      session.send("So you will have to share the details again");
+      session.sendTyping();
+      builder.pro.text(session,"What is your name?");
+    }else{
+      builder.pro.text(session,"What is your name?");
+    }
+  },
+  function(session,results){
+    session.userData.name= results.response;
+    session.sendTyping();
+    builder.Prompts.number("Hi %s. Can I have your phone number also??",results.response);
+  },
+  function (session,results){
+    session.userData.phoneNumber = results.response;
   }
 ]);
