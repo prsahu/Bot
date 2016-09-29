@@ -222,7 +222,7 @@ bot.dialog('/User Information',[
   function(session,results){
     session.userData.name= results.response;
     session.sendTyping();
-    builder.Prompts.number("Hi %s. Can I have your phone number also??",results.response);
+    builder.Prompts.number(session,"Hi %s. Can I have your phone number also??",results.response);
   },
   function (session,results){
     session.userData.phoneNumber = results.response;
