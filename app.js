@@ -162,6 +162,7 @@ bot.endConversationAction('goodbye', 'Goodbye :)', { matches: /^goodbye/i });
 
 bot.dialog('/',
 function(session){
+  session.conversationData = {};
   session.replaceDialog('/Welcome');
 });
 
