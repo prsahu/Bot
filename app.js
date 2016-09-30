@@ -146,12 +146,8 @@ var insertDocuments = function(db, callback) {
 }
 
 function SaveTheOrder(session){
-  var collection = dataBase.collection('orders');
-  
-  var order={};
-
-  
-   db.collection('orders').insertOne( {
+  var collection = dataBase.collection('orders');  
+   dataBase.collection('orders').insertOne( {
       "details" : {
          "name" : session.userData.name,
          "phoneNumber" : session.userData.phoneNumber         
