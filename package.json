@@ -13,6 +13,7 @@
     "google-auth-library": "^0.9.8",
     "google-spreadsheet": "2.0.3",
     "googleapis": "^13.0.0",
+    "mongodb": "^2.2.10",
     "restify": "^4.1.1"
   }
 }
