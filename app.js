@@ -95,7 +95,7 @@ function CreateMenuCardsForView(session){
 //=========================================================
 // Bot Setup
 //=========================================================
-var mongo = require('mongo');
+var mongo = require('./mongo');
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
