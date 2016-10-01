@@ -1,8 +1,10 @@
 
-var dishes;
-var description;
+var dishes=[];
+var description=[];
 var imageUrls;
 var tempDish="";
+var sheets = require('./sheetsapi.js');
+
 function listMajors(){//auth) {
   var sheets = google.sheets('v4');
   sheets.spreadsheets.values.get({
@@ -95,14 +97,17 @@ function CreateMenuCardsForView(session){
 //=========================================================
 // Bot Setup
 //=========================================================
-var mongo = require('./mongo');
+var mongo = require('./mongo.js');
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
    console.log('%s listening to %s', server.name, server.url);
    mongo.ConnectToDB();
    //setAuth();
-   listMajors();
+   //listMajors();
+   sheets.setAuth();
+   dishes = sheets.dishes;
+   description = sheets.description;
 });
 
 // Create chat bot
@@ -115,48 +120,6 @@ server.post('/api/messages', connector.listen());
 
 var google = require('googleapis');
 
-//=========================================================
-//MongoDB
-//=========================================================
-
-/*var dataBase;
-var MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
- 
-// Connection URL 
-var url = process.env.MongoDBURL;
-// Use connect method to connect to the Server 
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  console.log("Connected correctly to server"); 
-  dataBase = db;
-});
-
-var insertDocuments = function(db, callback) {
-  // Get the documents collection 
-  var collection = db.collection('orders');
-  // Insert some documents 
-  collection.insertMany([
-    {a : 1}, {a : 2}, {a : 3}
-  ], function(err, result) {
-    assert.equal(err, null);
-    assert.equal(3, result.result.n);
-    assert.equal(3, result.ops.length);
-    console.log("Inserted 3 documents into the document collection");
-    callback(result);
-  });
-}
-
-function SaveTheOrder(session){
-  var collection = dataBase.collection('orders');  
-   dataBase.collection('orders').insertOne( {
-      "details" : {
-         "name" : session.userData.name,
-         "phoneNumber" : session.userData.phoneNumber         
-      },
-      "order":session.conversationData
-   });
-}*/
 //=========================================================
 // Bots Dialogs
 //=========================================================
@@ -195,8 +158,11 @@ bot.dialog('/Welcome', [
 ]);
 
 bot.dialog('/Place an order',[
-  function(session){
+  function(session){    
     session.sendTyping();
+    dishes = sheets.GiveDishes();
+   description = sheets.GiveDescription();
+   
     session.send("Here is the menu: ");
     var msg = new builder.Message(session)
         .attachmentLayout(builder.AttachmentLayout.carousel)
@@ -268,7 +234,8 @@ bot.dialog('/Order Confirmation',[
       
       session.send("Thanks you for your order again %s",session.userData.name);
       //console.log("End");
-      SaveTheOrder(session);
+      mongo.SaveTheOrder(session);
+      sheets.WriteOrder(session);
       session.endConversation("");
     }else{
       session.replaceDialog('/User Information');

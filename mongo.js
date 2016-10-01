@@ -3,7 +3,7 @@ var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
  
 // Connection URL 
-var url = process.env.MongoDBURL;
+var url = "mongodb://prsahu:qwerASD4@ds047166.mlab.com:47166/indiankitchen";//process.env.MongoDBURL;
 // Use connect method to connect to the Server 
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
@@ -11,7 +11,7 @@ MongoClient.connect(url, function(err, db) {
   dataBase = db;
 });
 
-function ConnectToDB(){
+exports.ConnectToDB =function(){
     MongoClient.connect(url,ConnectCallback);
 }
 
@@ -21,22 +21,8 @@ function ConnectCallback(err,db){
     dataBase = db;
 }
 
-var insertDocuments = function(db, callback) {
-  // Get the documents collection 
-  var collection = db.collection('orders');
-  // Insert some documents 
-  collection.insertMany([
-    {a : 1}, {a : 2}, {a : 3}
-  ], function(err, result) {
-    assert.equal(err, null);
-    assert.equal(3, result.result.n);
-    assert.equal(3, result.ops.length);
-    console.log("Inserted 3 documents into the document collection");
-    callback(result);
-  });
-}
 
-function SaveTheOrder(session){
+exports.SaveTheOrder=function(session){
   var collection = dataBase.collection('orders');  
    dataBase.collection('orders').insertOne( {
       "details" : {
