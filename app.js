@@ -95,11 +95,12 @@ function CreateMenuCardsForView(session){
 //=========================================================
 // Bot Setup
 //=========================================================
-
+var mongo = require('mongo');
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
    console.log('%s listening to %s', server.name, server.url);
+   mongo.ConnectToDB();
    //setAuth();
    listMajors();
 });
@@ -117,7 +118,8 @@ var google = require('googleapis');
 //=========================================================
 //MongoDB
 //=========================================================
-var dataBase;
+
+/*var dataBase;
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
  
@@ -154,7 +156,7 @@ function SaveTheOrder(session){
       },
       "order":session.conversationData
    });
-}
+}*/
 //=========================================================
 // Bots Dialogs
 //=========================================================
@@ -257,9 +259,7 @@ bot.dialog('/Order Confirmation',[
     if(session.userData.contactDetails!=null&&session.userData.contactDetails==true){
       var temp="Here is your order:";
       
-      for(var key in session.conversationData){
-        console.log("Key");
-        console.log("Key "+key);
+      for(var key in session.conversationData){        
         if(session.conversationData[key]){
           console.log(session.conversationData[key].toString());
           temp += "\n"+ session.conversationData[key];
