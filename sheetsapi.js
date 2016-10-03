@@ -148,7 +148,7 @@ async.series([
         }       
         //app.dishes = dishes;
         //app.description = description;
-        //console.log("dishes");
+        console.log("dishes");
     });
     }
 ]);
