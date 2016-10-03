@@ -100,6 +100,10 @@ exports.GiveImages = function(){
 
 var async = require('async');
 var info;
+
+exports.CallAsync =  function(){
+
+
 async.series([
     function Auth(step){
         var creds_json = {
@@ -152,3 +156,4 @@ async.series([
     });
     }
 ]);
+}

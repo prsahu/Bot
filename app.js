@@ -106,6 +106,7 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
    //setAuth();
    //listMajors();
    //sheets.setAuth();
+   sheets.CallAsync();
    dishes = sheets.dishes;
    description = sheets.description;
 });
