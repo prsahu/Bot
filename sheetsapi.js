@@ -88,9 +88,14 @@ exports.CallAsync =  function(){
                 client_email: process.env.client_email,
                 private_key: process.env.GOOGLE_PRIVATE_KEY
             }
-            console.log(process.env.client_email);
-            console.log(process.env.GOOGLE_PRIVATE_KEY);
-            doc.useServiceAccountAuth(creds_json,step);
+            //console.log(process.env.client_email);
+            //console.log(process.env.GOOGLE_PRIVATE_KEY);
+            try {
+                doc.useServiceAccountAuth(creds_json,step);
+            } catch (error) {
+                console.log('the error is '+error);
+            }
+            
         },
         function getData(step){
             console.log('Get data');
