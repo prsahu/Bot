@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.0.1",
     "botbuilder": "^3.2.3",
     "google-auth-library": "^0.9.8",
     "google-spreadsheet": "2.0.3",
