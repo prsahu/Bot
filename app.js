@@ -93,6 +93,26 @@ function CreateMenuCardsForView(session){
   }
   return cardsForViewing;
 }
+
+function CreateReceipt(session){
+  var receiptItems = [];
+  for(var key in session.conversationData){        
+        if(session.conversationData[key]){
+          var tp = new builder.ReceiptItem.create(session, key, session.conversationData[key]);
+          receiptItems.push(tp);
+        }
+  }
+  var msg = new builder.Message(session)
+            .attachments([
+                new builder.ReceiptCard(session)
+                    .title("Recipient's Name")
+                    .items([
+                        receiptItems
+                    ])
+                    //.total("$48.40")
+            ]);
+  return msg;
+}
  
 //=========================================================
 // Bot Setup
@@ -232,7 +252,7 @@ bot.dialog('/Order Confirmation',[
           temp += "\n"+ session.conversationData[key];
         }
       }
-      
+      session.send(CreateReceipt);
       session.send("Thanks you for your order again %s",session.userData.name);
       //console.log("End");
       mongo.SaveTheOrder(session);
