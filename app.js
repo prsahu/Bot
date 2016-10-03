@@ -105,7 +105,7 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
    mongo.ConnectToDB();
    //setAuth();
    //listMajors();
-   sheets.setAuth();
+   //sheets.setAuth();
    dishes = sheets.dishes;
    description = sheets.description;
 });

@@ -96,3 +96,59 @@ exports.GiveDescription = function(){
 exports.GiveImages = function(){
     return imageUrls;
 }
+
+
+var async = require('async');
+var info;
+async.series([
+    function Auth(step){
+        var creds_json = {
+        client_email: process.env.client_email,
+        private_key: process.env.GOOGLE_PRIVATE_KEY
+        }
+        doc.useServiceAccountAuth(creds_json,step);
+    },
+    function getData(step){
+        doc.getInfo(function(err,info){
+            if(err){
+      console.log('The error is '+err);
+      return;
+    }
+      console.log('Loaded doc: '+info.title+' by '+info.author.email);
+      sheet = info.worksheets[0];
+      sheetOrders = info.worksheets[2];
+      step();
+        });
+    },
+    function populate(step){
+        sheet.getCells({
+      'min-row': 1,
+      'max-row': 5,
+      'min-col': 1,
+      'max-col': 3,
+      'return-empty': true
+    },function(err,cells){
+        if(err){
+            console.log('The error is '+err);
+            return;
+        }
+        var j=0;        
+        var i = 0;
+        while(j<cells.length){
+            dishes[i] = cells[j].value;
+            j++;            
+            //console.log(j);
+            description[i] = cells[j].value;
+            //console.log("Mid "+cells[j].value);
+            j++;
+            imageUrls[i] = cells[j].value;
+            j++;
+            //console.log("End "+cells[j].value);
+            i++;
+        }       
+        //app.dishes = dishes;
+        //app.description = description;
+        //console.log("dishes");
+    });
+    }
+]);
