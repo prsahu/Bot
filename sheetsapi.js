@@ -99,7 +99,16 @@ exports.CallAsync =  function(){
         },
         function getData(step){
             console.log('Get data');
-            doc.getInfo(GetInfoCallback);
+            doc.getInfo(function(err,info){
+    console.log('Get info callback');
+if(err){
+                    console.log('The error is '+err);
+                    return;
+                }
+                console.log('Loaded doc: '+info.title+' by '+info.author.email);
+                sheet = info.worksheets[0];
+                sheetOrders = info.worksheets[2];
+});
             step();
         },
         function populate(step){
@@ -110,7 +119,30 @@ exports.CallAsync =  function(){
                 'min-col': 1,
                 'max-col': 3,
                 'return-empty': true
-            },GetCellsCallback);        
+            },function(err,cells){
+    console.log('Get cells callback');
+    if(err){
+        console.log('The error is '+err);
+                return;
+            }
+            var j=0;        
+            var i = 0;
+            while(j<cells.length){
+                dishes[i] = cells[j].value;
+                j++;            
+                //console.log(j);
+                description[i] = cells[j].value;
+                //console.log("Mid "+cells[j].value);
+                j++;
+                imageUrls[i] = cells[j].value;
+                j++;
+                //console.log("End "+cells[j].value);
+                i++;
+            }       
+            //app.dishes = dishes;
+            //app.description = description;
+            console.log("dishes");
+});        
         }
     ]);
 }

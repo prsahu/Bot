@@ -93,7 +93,7 @@ function CreateMenuCardsForView(session){
   }
   return cardsForViewing;
 }
-
+ 
 //=========================================================
 // Bot Setup
 //=========================================================
@@ -105,8 +105,8 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
    mongo.ConnectToDB();
    //setAuth();
    //listMajors();
-   //sheets.setAuth();
-   sheets.CallAsync();
+   sheets.setAuth();
+   //sheets.CallAsync();
    dishes = sheets.dishes;
    description = sheets.description;
 });
