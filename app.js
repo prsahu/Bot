@@ -109,7 +109,11 @@ function CreateReceipt(session){
                     .items([
                         receiptItems
                     ])
-                    //.total("$48.40")
+                    .facts([
+                        builder.Fact.create(session, "1234567898", "Order Number"),
+                        builder.Fact.create(session, "VISA 4076", "Payment Method")
+                    ])
+                    .total("$48.40")
             ]);
   return msg;
 }
