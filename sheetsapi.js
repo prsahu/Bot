@@ -102,7 +102,7 @@ var async = require('async');
 var info;
 
 exports.CallAsync =  function(){
-
+console.log('Called async');
 
 async.series([
     function Auth(step){
